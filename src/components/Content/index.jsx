@@ -37,7 +37,7 @@ const makeMapStateToProps = () => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  get: () => dispatch(getProducts()),
+  get: (params) => dispatch(getProducts(params)),
 });
 
 export default connect(

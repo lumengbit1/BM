@@ -66,7 +66,7 @@ const Content = (props) => {
 Content.propTypes = {
   getLocation: PropTypes.func.isRequired,
   getWeatherReport: PropTypes.func.isRequired,
-  locationRecords: ImmutablePropTypes.list,
+  locationRecords: ImmutablePropTypes.map,
   weatherRecords: ImmutablePropTypes.map,
 };
 

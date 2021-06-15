@@ -10,7 +10,7 @@ import {
 
 const WeatherWidget = (props) => {
   const { weatherRecords, weatherValue, index } = props;
-  console.log(weatherValue);
+
   return (
     <Root>
       <Cell>
@@ -18,7 +18,7 @@ const WeatherWidget = (props) => {
           Date
         </div>
         <div>
-          {moment().add(index + 1, 'days').tz(weatherRecords.get('timezone')).format('dddd, Do MMM YYYY')}
+          {moment().add(index, 'days').tz(weatherRecords.get('timezone')).format('dddd, Do MMM YYYY')}
         </div>
       </Cell>
       <Cell>
@@ -26,7 +26,7 @@ const WeatherWidget = (props) => {
           Maximum Temperature
         </div>
         <div>
-          {weatherValue.get('temp').get('max')}
+          {`${weatherValue.get('temp').get('max')}°`}
         </div>
       </Cell>
       <Cell>
@@ -34,7 +34,7 @@ const WeatherWidget = (props) => {
           Minimum Temperature
         </div>
         <div>
-          {weatherValue.get('temp').get('min')}
+          {`${weatherValue.get('temp').get('min')}°`}
         </div>
       </Cell>
       <Cell>

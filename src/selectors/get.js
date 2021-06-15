@@ -1,12 +1,23 @@
 import { createSelector } from 'reselect';
 
-function getSelector(state) {
-  return state.getIn(['value', 'records']);
+function getLocationSelector(state) {
+  return state.getIn(['value', 'location']);
 }
 
-export function makeSelector() {
+function getWeatherSelector(state) {
+  return state.getIn(['value', 'weather']);
+}
+
+export function makeLocationSelector() {
   return createSelector(
-    [getSelector],
+    [getLocationSelector],
+    (records) => records,
+  );
+}
+
+export function makeWeatherSelector() {
+  return createSelector(
+    [getWeatherSelector],
     (records) => records,
   );
 }

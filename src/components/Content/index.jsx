@@ -1,24 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import Select from 'react-select';
 import _ from 'lodash';
-import { getProducts } from '../../reducers/actions';
+import { getLocation } from '../../reducers/actions';
 import { makeSelector } from '../../selectors/get';
 
 const Content = (props) => {
   const { get, records } = props;
   const [inputValue, setInputValue] = React.useState();
+
   const options = records && records.size > 0
     ? records.map((record) => _.assign({}, { label: record.get('display_name'), value: { lat: record.get('lat'), lon: record.get('lon') } })).toJS()
     : [];
 
   const handleInputChange = _.debounce((value) => {
-    get(value);
+    getLocation(value);
   }, 500);
 
   const handleChange = (value) => {
-    setInputValue(value);
+    setInputValue(fromJS(value));
   };
   console.log(inputValue);
   return (
@@ -55,7 +57,8 @@ const makeMapStateToProps = () => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  get: (params) => dispatch(getProducts(params)),
+  getLocation: (location) => dispatch(getLocation(location)),
+  getWeatherReport: (lat, lon) => dispatch(getLocation(lat, lon)),
 });
 
 export default connect(

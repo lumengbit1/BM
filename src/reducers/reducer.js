@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { get, get_successed, get_failed } from './actions';
+import { get_successed, get_failed } from './actions';
 
 const initialState = fromJS({
   records: {},
@@ -9,7 +9,6 @@ const initialState = fromJS({
 
 const reducer = handleActions(
   {
-    [get]: (state) => ({ state }),
     [get_successed]: (state, action) => {
       const records = fromJS(action.payload.data);
       return state.set('records', records);

@@ -1,0 +1,11 @@
+assets/**/*
+definition/**/*
+dist/**/*
+docs/**/*
+**/node_modules/**/*
+!**/.*/
+.history/**/*
+src/lib/**/*
+packages/**/*
+src/index.js
+src/reportWebVitals.js

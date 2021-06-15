@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { get, get_successed, get_failed } from './actions';
+import { get_location_successed, get_weather_successed, get_failed } from './actions';
 
 const initialState = fromJS({
   records: {},
@@ -9,10 +9,13 @@ const initialState = fromJS({
 
 const reducer = handleActions(
   {
-    [get]: (state) => ({ state }),
-    [get_successed]: (state, action) => {
+    [get_location_successed]: (state, action) => {
       const records = fromJS(action.payload.data);
-      return state.set('records', records);
+      return state.set('location', records);
+    },
+    [get_weather_successed]: (state, action) => {
+      const records = fromJS(action.payload.data);
+      return state.set('weather', records);
     },
     [get_failed]: (state, action) => {
       const errors = fromJS(action.payload.data);

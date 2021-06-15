@@ -1,43 +1,84 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { getProducts } from '../../reducers/actions';
-import { makeSelector } from '../../selectors/get';
+import { fromJS, Map } from 'immutable';
+import Select from 'react-select';
+import _ from 'lodash';
+import { getLocationAction, getWeatherAction } from '../../reducers/actions';
+import { makeLocationSelector, makeWeatherSelector } from '../../selectors/get';
 
-const Content = (props) => (
-  <div>
-    <button type="button" onClick={() => props.get()}>
-      get
-    </button>
+const Content = (props) => {
+  const { getLocation, locationRecords, getWeatherReport, weatherRecords } = props;
+  const [inputValue, setInputValue] = React.useState();
 
-    {props.records && (
-      <div>
-        {props.records}
-      </div>
-    )}
-  </div>
-);
+  const isActive = inputValue && inputValue.get('value').get('lat') && inputValue.get('value').get('lon');
+  const latitude = inputValue && inputValue.get('value').get('lat');
+  const longitude = inputValue && inputValue.get('value').get('lon');
+
+  const options = locationRecords && locationRecords.size > 0
+    ? locationRecords.map((record) => _.assign({}, { label: record.get('display_name'), value: { lat: record.get('lat'), lon: record.get('lon') } })).toJS()
+    : [];
+
+  const handleInputChange = _.debounce((value) => {
+    if (value) {
+      getLocation(value);
+    }
+  }, 500);
+
+  const handleOnChange = (value) => {
+    setInputValue(fromJS(value));
+  };
+
+  const handleOnSubmit = () => {
+    getWeatherReport(latitude, longitude);
+  };
+  console.log(weatherRecords);
+  return (
+    <div>
+      <Select
+        value={Map(inputValue).toJS()}
+        onInputChange={handleInputChange}
+        onChange={handleOnChange}
+        options={options}
+      />
+      <button
+        type="button"
+        disabled={!isActive}
+        onClick={handleOnSubmit}
+      >
+        Submit
+      </button>
+    </div>
+  );
+};
 
 Content.propTypes = {
-  get: PropTypes.func.isRequired,
-  records: PropTypes.string,
+  getLocation: PropTypes.func.isRequired,
+  getWeatherReport: PropTypes.func.isRequired,
+  locationRecords: ImmutablePropTypes.list,
+  weatherRecords: ImmutablePropTypes.map,
 };
 
 Content.defaultProps = {
-  records: undefined,
+  locationRecords: undefined,
+  weatherRecords: undefined,
 };
 
 const makeMapStateToProps = () => {
-  const getSelector = makeSelector();
+  const getLocationSelector = makeLocationSelector();
+  const getWeatherSelector = makeWeatherSelector();
 
   const mapStateToProps = (state) => ({
-    records: getSelector(state),
+    locationRecords: getLocationSelector(state),
+    weatherRecords: getWeatherSelector(state),
   });
   return mapStateToProps;
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  get: () => dispatch(getProducts()),
+  getLocation: (location) => dispatch(getLocationAction(location)),
+  getWeatherReport: (lat, lon) => dispatch(getWeatherAction(lat, lon)),
 });
 
 export default connect(

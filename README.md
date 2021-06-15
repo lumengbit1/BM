@@ -11,13 +11,13 @@ This app uses node v15.4.0, or npm v15.4.0
 Install project dependencies you can use npm:
 
 ```
-npm install
+yarn install
 ```
 
 #### Run development server
 
 ```
-npm start
+yarn start
 ```
 
 #### Run linters

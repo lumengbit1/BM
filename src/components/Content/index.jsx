@@ -1,12 +1,14 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
+
 import Select from 'react-select';
-import _ from 'lodash';
 import { getLocationAction, getWeatherAction } from '../../reducers/actions';
 import { makeLocationSelector, makeWeatherSelector } from '../../selectors/get';
+import WeatherWidget from '../WeatherWidget';
 
 const Content = (props) => {
   const { getLocation, locationRecords, getWeatherReport, weatherRecords } = props;
@@ -33,7 +35,7 @@ const Content = (props) => {
   const handleOnSubmit = () => {
     getWeatherReport(latitude, longitude);
   };
-  console.log(weatherRecords);
+
   return (
     <div>
       <Select
@@ -49,6 +51,14 @@ const Content = (props) => {
       >
         Submit
       </button>
+      {weatherRecords && weatherRecords.get('daily').map((value, index) => (
+        <WeatherWidget
+          key={value.get('dt')}
+          weatherRecords={weatherRecords}
+          weatherValue={value}
+          index={index}
+        />
+      ))}
     </div>
   );
 };
@@ -56,7 +66,7 @@ const Content = (props) => {
 Content.propTypes = {
   getLocation: PropTypes.func.isRequired,
   getWeatherReport: PropTypes.func.isRequired,
-  locationRecords: ImmutablePropTypes.list,
+  locationRecords: ImmutablePropTypes.map,
   weatherRecords: ImmutablePropTypes.map,
 };
 

@@ -7,6 +7,6 @@ function getSelector(state) {
 export function makeSelector() {
   return createSelector(
     [getSelector],
-    (records) => records.get('title'),
+    (records) => records,
   );
 }

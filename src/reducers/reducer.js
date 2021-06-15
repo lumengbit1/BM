@@ -4,7 +4,6 @@ import { get_location_successed, get_weather_successed, get_failed } from './act
 
 const initialState = fromJS({
   location: {},
-  weather: {},
   errors: {},
 });
 

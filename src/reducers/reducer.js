@@ -3,7 +3,8 @@ import { fromJS } from 'immutable';
 import { get_location_successed, get_weather_successed, get_failed } from './actions';
 
 const initialState = fromJS({
-  records: {},
+  location: {},
+  weather: {},
   errors: {},
 });
 

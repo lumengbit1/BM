@@ -7,7 +7,7 @@ import { fromJS, Map } from 'immutable';
 
 import Select from 'react-select';
 import { getLocationAction, getWeatherAction, clear_data } from '../../reducers/actions';
-import { makeLocationSelector, makeWeatherSelector } from '../../selectors/get';
+import { makeLocationSelector, makeWeatherSelector } from '../../selectors/selectors';
 import WeatherWidget from '../WeatherWidget';
 import { Root, SubmitBtn, SelectContainer } from './style';
 
@@ -65,7 +65,6 @@ const Content = (props) => {
         />
       </SelectContainer>
       <SubmitBtn
-        type="button"
         disabled={!isActive}
         onClick={handleOnSubmit}
       >
@@ -91,7 +90,7 @@ Content.defaultProps = {
   weatherRecords: undefined,
 };
 
-const makeMapStateToProps = () => {
+export const makeMapStateToProps = () => {
   const getLocationSelector = makeLocationSelector();
   const getWeatherSelector = makeWeatherSelector();
 
@@ -102,7 +101,7 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
-const mapDispatchToProps = (dispatch) => ({
+export const mapDispatchToProps = (dispatch) => ({
   getLocation: (location) => dispatch(getLocationAction(location)),
   getWeatherReport: (lat, lon) => dispatch(getWeatherAction(lat, lon)),
   ClearData: () => dispatch(clear_data()),

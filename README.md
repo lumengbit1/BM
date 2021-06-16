@@ -4,11 +4,11 @@
 
 #### Requirement
 
-This app uses node v15.4.0, or npm v15.4.0
+This app uses node v15.4.0, or npm v15.4.0, and yarn v1.16.0
 
 #### Project setup
 
-Install project dependencies you can use npm:
+Install project dependencies you can use yarn:
 
 ```
 yarn install
@@ -23,13 +23,13 @@ yarn start
 #### Run linters
 
 ```
-npm run lint
+yarn run lint
 ```
 
 #### Run tests
 
 ```
-npm test
+yarn test
 ```
 
 #### Create production build

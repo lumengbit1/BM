@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
-import { fromJS } from 'immutable';
-import { get_location_successed, get_weather_successed, get_failed } from './actions';
+import { fromJS, List, Map } from 'immutable';
+import { get_location_successed, get_weather_successed, get_failed, clear_data } from './actions';
 
 const initialState = fromJS({
   location: [],
@@ -22,6 +22,7 @@ const reducer = handleActions(
       const errors = fromJS(action.payload.data);
       return state.set('errors', errors);
     },
+    [clear_data]: (state) => state.set('location', List()).set('weather', Map()),
   },
   initialState,
 );

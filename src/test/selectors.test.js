@@ -14,6 +14,8 @@ import {
   makeWeatherSelector,
   getLocationSelector,
   getWeatherSelector,
+  getWeatherLoadingSelector,
+  getLocationLoadingSelector,
 } from '../selectors/selectors';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -33,6 +35,10 @@ const initialState = fromJS({
     location: ['test1', 'test2'],
     weather: { test: 'test' },
     errors: {},
+    loading: {
+      weather: true,
+      location: false,
+    },
   }
 })
 
@@ -45,7 +51,15 @@ describe(`Test <App />`, () => {
     expect(getWeatherSelector(initialState)).toEqual(initialState.get('value').get('weather'));
   });
 
-  it('3.should return makeLocationSelector state', () => {
+  it('3.should return getWeatherLoadingSelector state', () => {
+    expect(getWeatherLoadingSelector(initialState)).toEqual(initialState.get('value').get('loading').get('weather'));
+  });
+
+  it('4.should return getLocationLoadingSelector state', () => {
+    expect(getLocationLoadingSelector(initialState)).toEqual(initialState.get('value').get('loading').get('location'));
+  });
+
+  it('5.should return makeLocationSelector state', () => {
     mock.onGet(locationUrl(mockLocation)).reply(200, { response: [{ item: 'item1' }, { item: 'item2' }] });
 
     const expectedActions = [
@@ -63,7 +77,7 @@ describe(`Test <App />`, () => {
     }).catch((err) => err);
   });
 
-  it('4.should return makeWeatherSelector state', () => {
+  it('6.should return makeWeatherSelector state', () => {
     mock.onGet(weatherUrl(mockLatitude, mockLongitude)).reply(200, { response: [{ item: 'item1' }, { item: 'item2' }] });
 
     const expectedActions = [

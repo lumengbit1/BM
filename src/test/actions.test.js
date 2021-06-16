@@ -63,6 +63,20 @@ describe('actions testing', () => {
     };
     expect(actions.clear_data()).toEqual(expectedAction);
   });
+
+  it('7.weather_loading functionality testing', () => {
+    const expectedAction = {
+      type: 'WEATHER_LOADING',
+    };
+    expect(actions.weather_loading()).toEqual(expectedAction);
+  });
+
+  it('8.location_loading functionality testing', () => {
+    const expectedAction = {
+      type: 'LOCATION_LOADING',
+    };
+    expect(actions.location_loading()).toEqual(expectedAction);
+  });
 });
 
 describe('async actions', () => {
@@ -75,6 +89,7 @@ describe('async actions', () => {
 
     const expectedActions = [
       { type: 'GET_LOCATION_REQUEST' },
+      { type: 'LOCATION_LOADING' },
       {
         type: 'GET_LOCATION_RESOLVED',
         payload: [{ item: 'item1' }, { item: 'item2' }],
@@ -93,6 +108,7 @@ describe('async actions', () => {
 
     const expectedActions = [
       { type: 'GET_WEATHER_REQUEST' },
+      { type: 'WEATHER_LOADING' },
       {
         type: 'GET_WEATHER_RESOLVED',
         payload: [{ item: 'item1' }, { item: 'item2' }],

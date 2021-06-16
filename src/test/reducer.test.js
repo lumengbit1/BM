@@ -6,6 +6,10 @@ const initialState = fromJS({
   location: [],
   weather: {},
   errors: {},
+  loading: {
+    weather: undefined,
+    location: undefined,
+  },
 });
 
 describe('Test reducer', () => {
@@ -22,6 +26,10 @@ describe('Test reducer', () => {
       location: ['test1', 'test2'],
       weather: {},
       errors: {},
+      loading: {
+        weather: undefined,
+        location: undefined,
+      },
     });
 
     expect(
@@ -41,6 +49,10 @@ describe('Test reducer', () => {
       location: [],
       weather: { test: 'test' },
       errors: {},
+      loading: {
+        weather: undefined,
+        location: undefined,
+      },
     });
 
     expect(
@@ -72,6 +84,10 @@ describe('Test reducer', () => {
       location: ['test1', 'test2'],
       weather: { test: 'test' },
       errors: {},
+      loading: {
+        weather: undefined,
+        location: undefined,
+      },
     });
 
     expect(
@@ -90,10 +106,54 @@ describe('Test reducer', () => {
       location: [],
       weather: {},
       errors: { error: 'error' },
+      loading: {
+        weather: undefined,
+        location: undefined,
+      },
     });
     expect(
       reducer(initialState, {
         type: 'GET_REJECTED',
+        payload
+      })
+    ).toEqual(expectedState);
+  })
+
+  it('8.should handle weather_loading', () => {
+    const payload = true;
+
+    const expectedState = fromJS({
+      location: [],
+      weather: {},
+      errors: {},
+      loading: {
+        weather: true,
+        location: undefined,
+      },
+    });
+    expect(
+      reducer(initialState, {
+        type: 'WEATHER_LOADING',
+        payload
+      })
+    ).toEqual(expectedState);
+  })
+
+  it('9.should handle location_loading', () => {
+    const payload = true;
+
+    const expectedState = fromJS({
+      location: [],
+      weather: {},
+      errors: {},
+      loading: {
+        weather: undefined,
+        location: true,
+      },
+    });
+    expect(
+      reducer(initialState, {
+        type: 'LOCATION_LOADING',
         payload
       })
     ).toEqual(expectedState);

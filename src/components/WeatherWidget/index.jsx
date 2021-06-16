@@ -9,8 +9,6 @@ import { Table } from './style';
 const WeatherWidget = (props) => {
   const { weatherRecords } = props;
 
-  if (!weatherRecords || weatherRecords.isEmpty()) return null;
-
   return (
     <Table>
       <thead>

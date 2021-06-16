@@ -14,6 +14,10 @@ import {
   makeWeatherSelector,
   getLocationSelector,
   getWeatherSelector,
+  getWeatherLoadingSelector,
+  getLocationLoadingSelector,
+  makeWeatherLoadingSelector,
+  makeLocationLoadingSelector,
 } from '../selectors/selectors';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -33,6 +37,10 @@ const initialState = fromJS({
     location: ['test1', 'test2'],
     weather: { test: 'test' },
     errors: {},
+    loading: {
+      weather: undefined,
+      location: undefined,
+    },
   }
 })
 
@@ -45,7 +53,15 @@ describe(`Test <App />`, () => {
     expect(getWeatherSelector(initialState)).toEqual(initialState.get('value').get('weather'));
   });
 
-  it('3.should return makeLocationSelector state', () => {
+  it('3.should return getWeatherLoadingSelector state', () => {
+    expect(getWeatherLoadingSelector(initialState)).toEqual(initialState.get('value').get('loading').get('weather'));
+  });
+
+  it('4.should return getLocationLoadingSelector state', () => {
+    expect(getLocationLoadingSelector(initialState)).toEqual(initialState.get('value').get('loading').get('location'));
+  });
+
+  it('5.should return makeLocationSelector state', () => {
     mock.onGet(locationUrl(mockLocation)).reply(200, { response: [{ item: 'item1' }, { item: 'item2' }] });
 
     const expectedActions = [
@@ -63,7 +79,7 @@ describe(`Test <App />`, () => {
     }).catch((err) => err);
   });
 
-  it('4.should return makeWeatherSelector state', () => {
+  it('6.should return makeWeatherSelector state', () => {
     mock.onGet(weatherUrl(mockLatitude, mockLongitude)).reply(200, { response: [{ item: 'item1' }, { item: 'item2' }] });
 
     const expectedActions = [
@@ -76,6 +92,26 @@ describe(`Test <App />`, () => {
 
     return store.dispatch(actions.getLocationAction()).then((res) => {
       expect(makeWeatherSelector(initialState)).toEqual(initialState.get('value').get('weather'));
+
+      return res;
+    }).catch((err) => err);
+  });
+
+  it('7.should return makeWeatherLoadingSelector state', () => {
+    expect(makeWeatherLoadingSelector()(initialState)).toEqual(undefined);
+
+    return store.dispatch(actions.getWeatherAction()).then((res) => {
+      expect(makeWeatherLoadingSelector()(initialState)).toEqual(false);
+
+      return res;
+    }).catch((err) => err);
+  });
+
+  it('8.should return makeLocationLoadingSelector state', () => {
+    expect(makeLocationLoadingSelector()(initialState)).toEqual(undefined);
+
+    return store.dispatch(actions.getLocationAction()).then((res) => {
+      expect(makeLocationLoadingSelector()(initialState)).toEqual(false);
 
       return res;
     }).catch((err) => err);

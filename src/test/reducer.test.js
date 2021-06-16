@@ -1,8 +1,6 @@
 import React from 'react'
-import Enzyme, { configure, shallow, mount } from 'enzyme'
 import { fromJS } from 'immutable';
 import reducer from './../reducers/reducer'
-import * as actions from '../reducers/actions';
 
 const initialState = fromJS({
   location: [],

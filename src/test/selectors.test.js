@@ -16,6 +16,8 @@ import {
   getWeatherSelector,
   getWeatherLoadingSelector,
   getLocationLoadingSelector,
+  makeWeatherLoadingSelector,
+  makeLocationLoadingSelector,
 } from '../selectors/selectors';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -36,8 +38,8 @@ const initialState = fromJS({
     weather: { test: 'test' },
     errors: {},
     loading: {
-      weather: true,
-      location: false,
+      weather: undefined,
+      location: undefined,
     },
   }
 })
@@ -90,6 +92,26 @@ describe(`Test <App />`, () => {
 
     return store.dispatch(actions.getLocationAction()).then((res) => {
       expect(makeWeatherSelector(initialState)).toEqual(initialState.get('value').get('weather'));
+
+      return res;
+    }).catch((err) => err);
+  });
+
+  it('7.should return makeWeatherLoadingSelector state', () => {
+    expect(makeWeatherLoadingSelector()(initialState)).toEqual(undefined);
+
+    return store.dispatch(actions.getWeatherAction()).then((res) => {
+      expect(makeWeatherLoadingSelector()(initialState)).toEqual(false);
+
+      return res;
+    }).catch((err) => err);
+  });
+
+  it('8.should return makeLocationLoadingSelector state', () => {
+    expect(makeLocationLoadingSelector()(initialState)).toEqual(undefined);
+
+    return store.dispatch(actions.getLocationAction()).then((res) => {
+      expect(makeLocationLoadingSelector()(initialState)).toEqual(false);
 
       return res;
     }).catch((err) => err);

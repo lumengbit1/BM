@@ -7,7 +7,7 @@ import { fromJS, Map } from 'immutable';
 
 import Select from 'react-select';
 import { getLocationAction, getWeatherAction, clear_data } from '../../reducers/actions';
-import { makeLocationSelector, makeWeatherSelector } from '../../selectors/selectors';
+import { makeLocationSelector, makeWeatherSelector, makeWeatherLoadingSelector, makeLocationLoadingSelector } from '../../selectors/selectors';
 import WeatherWidget from '../WeatherWidget';
 import { Root, SubmitBtn, SelectContainer } from './style';
 
@@ -20,7 +20,7 @@ function usePrevious(value) {
 }
 
 const Content = (props) => {
-  const { getLocation, locationRecords, getWeatherReport, weatherRecords, ClearData } = props;
+  const { getLocation, locationRecords, getWeatherReport, weatherRecords, ClearData, weatherLoading, locationLoading } = props;
   const [inputValue, setInputValue] = React.useState();
 
   const prevInputValue = usePrevious({ inputValue });
@@ -62,6 +62,7 @@ const Content = (props) => {
           onChange={handleOnChange}
           options={options}
           isClearable
+          isLoading={locationLoading}
         />
       </SelectContainer>
       <SubmitBtn
@@ -70,9 +71,12 @@ const Content = (props) => {
       >
         Submit
       </SubmitBtn>
+
       <WeatherWidget
         weatherRecords={weatherRecords}
+        loading={weatherLoading}
       />
+
     </Root>
   );
 };
@@ -83,20 +87,28 @@ Content.propTypes = {
   ClearData: PropTypes.func.isRequired,
   locationRecords: ImmutablePropTypes.list,
   weatherRecords: ImmutablePropTypes.map,
+  weatherLoading: PropTypes.bool,
+  locationLoading: PropTypes.bool,
 };
 
 Content.defaultProps = {
   locationRecords: undefined,
   weatherRecords: undefined,
+  weatherLoading: undefined,
+  locationLoading: undefined,
 };
 
 export const makeMapStateToProps = () => {
   const getLocationSelector = makeLocationSelector();
   const getWeatherSelector = makeWeatherSelector();
+  const getWeatherLoadingSelector = makeWeatherLoadingSelector();
+  const getLocationLoadingSelector = makeLocationLoadingSelector();
 
   const mapStateToProps = (state) => ({
     locationRecords: getLocationSelector(state),
     weatherRecords: getWeatherSelector(state),
+    weatherLoading: getWeatherLoadingSelector(state),
+    locationLoading: getLocationLoadingSelector(state),
   });
   return mapStateToProps;
 };

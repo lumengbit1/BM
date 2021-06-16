@@ -3,6 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Map } from 'immutable';
+import withComponentLoading from './util';
 import { Table } from './style';
 
 const WeatherWidget = (props) => {
@@ -51,4 +52,4 @@ WeatherWidget.defaultProps = {
   weatherRecords: Map(),
 };
 
-export default WeatherWidget;
+export default withComponentLoading(WeatherWidget);

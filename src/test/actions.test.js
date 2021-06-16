@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import Enzyme, { configure, shallow, mount } from 'enzyme';
+import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import queryString from 'query-string';
 import configureMockStore from 'redux-mock-store';

@@ -6,7 +6,7 @@ const initialState = fromJS({
   location: [],
   weather: {},
   errors: {},
-})
+});
 
 describe('Test reducer', () => {
   it('1.should return the initial state', () => {

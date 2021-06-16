@@ -1,86 +1,93 @@
-// import React from 'react'
-// import Enzyme, { configure, shallow, mount, render } from 'enzyme'
-// import Content from './../components/Content'
-// import configureMockStore from 'redux-mock-store'
-// import { Provider } from 'react-redux'
-// import sinon from 'sinon'
-// import { mapStateToProps, mapDispatchToProps } from './../components/Content'
-// import { getProducts } from "./../Reducers/actions"
-// import thunk from 'redux-thunk'
-// import * as ContentFunc from './../components/Content'
+import React from 'react';
+import 'jest-styled-components';
+import Enzyme, { mount, shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import Content, { mapDispatchToProps } from '../components/Content';
+import configureMockStore from 'redux-mock-store';
+import { Provider } from 'react-redux';
+import { fromJS } from 'immutable';
+import sinon from 'sinon';
+import { getLocationAction, getWeatherAction, clear_data } from "../reducers/actions";
+import thunk from 'redux-thunk';
 
-// function setup() {
-//   const props = {
-//     calcWeight: jest.fn()
-//   }
-//   const middlewares = [thunk];
-//   const mockStore = configureMockStore(middlewares);
-//   let store = mockStore();
-//   const enzymeWrapper = mount(
-//     <Provider store={store} >
-//       <Content {...props} />
-//     </Provider>)
+Enzyme.configure({ adapter: new Adapter() });
 
-//   return {
-//     props,
-//     enzymeWrapper
-//   }
-// }
+function setup() {
+  const props = {
+    handleOnSubmit: jest.fn(),
+  }
 
-// describe('mapStateToProps,mapDispatchToProps Testing', () => {
-//   let wrapper, store;
-//   const middlewares = [thunk];
-//   const mockStore = configureMockStore(middlewares);
-//   beforeEach(() => {
-//     const initialState = {
-//       content: 1,
-//     };
-//     store = mockStore(initialState);
-//     wrapper = mount(
-//       <Provider store={store} >
-//         <Content />
-//       </Provider>)
-//   })
+  const middlewares = [thunk];
+  const mockStore = configureMockStore(middlewares);
+  let store = mockStore();
+  const enzymeWrapper = mount(
+    <Provider store={store} >
+      <Content {...props} />
+    </Provider>)
 
-//   it('onfetchData Testing', () => {
+  return {
+    props,
+    enzymeWrapper
+  }
+}
 
-//     const dispatchSpy = sinon.spy();
-//     const { onfetchData } = mapDispatchToProps(dispatchSpy);
-//     onfetchData();
-//     const expectedAction = getProducts();
-//     const spyLastCall = dispatchSpy.args[0][0];
-//     expect(spyLastCall.types).toEqual(expectedAction.types);
+describe('mapStateToProps,mapDispatchToProps Testing', () => {
+  let wrapper, store;
+  const middlewares = [thunk];
+  const mockStore = configureMockStore(middlewares);
+  beforeEach(() => {
+    const initialState = fromJS({
+      location: [],
+      weather: {},
+      errors: {},
+    });
 
-//   })
-// })
+    store = mockStore(initialState);
+    wrapper = mount(
+      <Provider store={store} >
+        <Content />
+      </Provider>)
+  })
 
-// describe('render snapshop testing', () => {
-//   it('renders correctly', () => {
-//     let wrapper, store;
-//     const middlewares = [thunk];
-//     const mockStore = configureMockStore(middlewares);
-//     store = mockStore();
-//     wrapper = render(
-//       <Provider store={store} >
-//         <Content />
-//       </Provider>);
+  it('1.getLocation Testing', () => {
+    const dispatchSpy = sinon.spy();
+    const { getLocation } = mapDispatchToProps(dispatchSpy);
+    getLocation();
+    const expectedAction = getLocationAction();
+    const spyLastCall = dispatchSpy.args[0][0];
+    expect(spyLastCall.types).toEqual(expectedAction.types);
+  })
 
-//     expect(wrapper).toMatchSnapshot();
-//   });
-// })
+  it('2.getWeatherReport Testing', () => {
+    const dispatchSpy = sinon.spy();
+    const { getWeatherReport } = mapDispatchToProps(dispatchSpy);
+    getWeatherReport();
+    const expectedAction = getWeatherAction();
+    const spyLastCall = dispatchSpy.args[0][0];
+    expect(spyLastCall.types).toEqual(expectedAction.types);
+  })
 
-// describe('component test', () => {
-//   it('click test', () => {
-//     const click = sinon.stub(Content, 'calcWeight');
-//     let wrapper, store;
-//     const middlewares = [thunk];
-//     const mockStore = configureMockStore(middlewares);
-//     store = mockStore();
-//     wrapper = mount(
-//       <Provider store={store} >
-//         <Content />
-//       </Provider>);
-//     wrapper.find('button').simulate('click')
-//     expect(click.called).toEqual(true);
-//   })
-// })
+  it('3.ClearData Testing', () => {
+    const dispatchSpy = sinon.spy();
+    const { ClearData } = mapDispatchToProps(dispatchSpy);
+    ClearData();
+    const expectedAction = clear_data();
+    const spyLastCall = dispatchSpy.args[0][0];
+    expect(spyLastCall.types).toEqual(expectedAction.types);
+  })
+})
+
+describe('render snapshop testing', () => {
+  it('renders correctly', () => {
+    let wrapper, store;
+    const middlewares = [thunk];
+    const mockStore = configureMockStore(middlewares);
+    store = mockStore();
+    wrapper = shallow(
+      <Provider store={store} >
+        <Content />
+      </Provider>);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+})

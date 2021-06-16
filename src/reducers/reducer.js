@@ -8,6 +8,7 @@ import {
   get_location,
   get_weather,
   weather_loading,
+  location_loading,
 } from './actions';
 
 const initialState = fromJS({
@@ -16,6 +17,7 @@ const initialState = fromJS({
   errors: {},
   loading: {
     weather: undefined,
+    location: undefined,
   },
 });
 
@@ -26,6 +28,10 @@ const reducer = handleActions(
     [weather_loading]: (state, action) => {
       const records = fromJS(action.payload);
       return state.setIn(['loading', 'weather'], records);
+    },
+    [location_loading]: (state, action) => {
+      const records = fromJS(action.payload);
+      return state.setIn(['loading', 'location'], records);
     },
     [get_location_successed]: (state, action) => {
       const records = fromJS(action.payload.data);

@@ -8,6 +8,8 @@ export const get_location = createAction('GET_LOCATION_REQUEST');
 
 export const weather_loading = createAction('WEATHER_LOADING', (loading) => loading);
 
+export const location_loading = createAction('LOCATION_LOADING', (loading) => loading);
+
 export const get_weather = createAction('GET_WEATHER_REQUEST');
 
 export const get_location_successed = createAction('GET_LOCATION_RESOLVED');
@@ -20,9 +22,13 @@ export const get_failed = createAction('GET_REJECTED');
 
 export const getLocationAction = (location, params) => (dispatch) => {
   dispatch(get_location());
+  dispatch(location_loading(true));
 
   return axios.get(`${settings.LOCATIONIQ_BASE_API_DOMAIN}?${queryString.stringify(_.assign({ q: location, key: settings.LOCATIONIQ_KEY, format: 'json' }, params))}`)
-    .then((response) => dispatch(get_location_successed(response)))
+    .then((response) => {
+      dispatch(location_loading(false));
+      return dispatch(get_location_successed(response));
+    })
     .catch((error) => dispatch(get_failed(error)));
 };
 

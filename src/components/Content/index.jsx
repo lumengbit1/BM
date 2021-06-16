@@ -9,7 +9,7 @@ import Select from 'react-select';
 import { getLocationAction, getWeatherAction } from '../../reducers/actions';
 import { makeLocationSelector, makeWeatherSelector } from '../../selectors/get';
 import WeatherWidget from '../WeatherWidget';
-import { Root, SubmitBtn } from './style';
+import { Root, SubmitBtn, SelectContainer } from './style';
 
 const Content = (props) => {
   const { getLocation, locationRecords, getWeatherReport, weatherRecords } = props;
@@ -39,12 +39,14 @@ const Content = (props) => {
 
   return (
     <Root>
-      <Select
-        value={Map(inputValue).toJS()}
-        onInputChange={handleInputChange}
-        onChange={handleOnChange}
-        options={options}
-      />
+      <SelectContainer>
+        <Select
+          value={Map(inputValue).toJS()}
+          onInputChange={handleInputChange}
+          onChange={handleOnChange}
+          options={options}
+        />
+      </SelectContainer>
       <SubmitBtn
         type="button"
         disabled={!isActive}

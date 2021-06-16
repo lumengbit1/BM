@@ -56,6 +56,13 @@ describe('actions testing', () => {
     };
     expect(actions.get_failed()).toEqual(expectedAction);
   });
+
+  it('6.clear_data functionality testing', () => {
+    const expectedAction = {
+      type: 'CLEAR_DATA',
+    };
+    expect(actions.clear_data()).toEqual(expectedAction);
+  });
 });
 
 describe('async actions', () => {

@@ -51,14 +51,9 @@ const Content = (props) => {
       >
         Submit
       </button>
-      {weatherRecords && weatherRecords.get('daily').map((value, index) => (
-        <WeatherWidget
-          key={value.get('dt')}
-          weatherRecords={weatherRecords}
-          weatherValue={value}
-          index={index}
-        />
-      ))}
+      <WeatherWidget
+        weatherRecords={weatherRecords}
+      />
     </div>
   );
 };
@@ -66,7 +61,7 @@ const Content = (props) => {
 Content.propTypes = {
   getLocation: PropTypes.func.isRequired,
   getWeatherReport: PropTypes.func.isRequired,
-  locationRecords: ImmutablePropTypes.map,
+  locationRecords: ImmutablePropTypes.list,
   weatherRecords: ImmutablePropTypes.map,
 };
 

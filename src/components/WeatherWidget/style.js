@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 
-export const Root = styled.div`
-  display: flex;
+export const Table = styled.table`
   width: 100%;
-`;
 
-export const Cell = styled.div`
-  width: 100%;
+  th, td {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid black;
+  }
 `;

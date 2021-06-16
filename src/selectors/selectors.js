@@ -8,6 +8,10 @@ export function getWeatherSelector(state) {
   return state.getIn(['value', 'weather']);
 }
 
+export function getWeatherLoadingSelector(state) {
+  return state.getIn(['value', 'loading', 'weather']);
+}
+
 export function makeLocationSelector() {
   return createSelector(
     [getLocationSelector],
@@ -18,6 +22,13 @@ export function makeLocationSelector() {
 export function makeWeatherSelector() {
   return createSelector(
     [getWeatherSelector],
+    (records) => records,
+  );
+}
+
+export function makeWeatherLoadingSelector() {
+  return createSelector(
+    [getWeatherLoadingSelector],
     (records) => records,
   );
 }

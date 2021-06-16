@@ -6,6 +6,8 @@ import settings from '../settings';
 
 export const get_location = createAction('GET_LOCATION_REQUEST');
 
+export const weather_loading = createAction('WEATHER_LOADING', (loading) => loading);
+
 export const get_weather = createAction('GET_WEATHER_REQUEST');
 
 export const get_location_successed = createAction('GET_LOCATION_RESOLVED');
@@ -26,8 +28,12 @@ export const getLocationAction = (location, params) => (dispatch) => {
 
 export const getWeatherAction = (latitude, longitude, params) => (dispatch) => {
   dispatch(get_weather());
+  dispatch(weather_loading(true));
 
   return axios.get(`${settings.OPEN_WEATHER_MAP_BASE_API_DOMAIN}?${queryString.stringify(_.assign({ lat: latitude, lon: longitude, appid: settings.OPEN_WEATHER_MAP_KEY, units: 'metric', exclude: 'current,minutely,hourly' }, params))}`)
-    .then((response) => dispatch(get_weather_successed(response)))
+    .then((response) => {
+      dispatch(weather_loading(false));
+      return dispatch(get_weather_successed(response));
+    })
     .catch((error) => dispatch(get_failed(error)));
 };

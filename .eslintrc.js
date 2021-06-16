@@ -95,6 +95,8 @@ module.exports = {
     // ignore required prop-types for className
     'react/prop-types': [2, { ignore: ['className'] }],
 
+    "react/jsx-props-no-spreading": "off",
+
     'react/sort-comp': [2, {
       order: [
         'static-methods',

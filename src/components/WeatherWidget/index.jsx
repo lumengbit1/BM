@@ -1,58 +1,54 @@
 import 'moment-timezone';
 import React from 'react';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import {
-  Root,
-  Cell,
-} from './style';
+import { Map } from 'immutable';
+import { Table } from './style';
 
 const WeatherWidget = (props) => {
-  const { weatherRecords, weatherValue, index } = props;
+  const { weatherRecords } = props;
+
+  if (!weatherRecords || weatherRecords.isEmpty()) return null;
 
   return (
-    <Root>
-      <Cell>
-        <div>
-          Date
-        </div>
-        <div>
-          {moment().add(index, 'days').tz(weatherRecords.get('timezone')).format('dddd, Do MMM YYYY')}
-        </div>
-      </Cell>
-      <Cell>
-        <div>
-          Maximum Temperature
-        </div>
-        <div>
-          {`${weatherValue.get('temp').get('max')}°`}
-        </div>
-      </Cell>
-      <Cell>
-        <div>
-          Minimum Temperature
-        </div>
-        <div>
-          {`${weatherValue.get('temp').get('min')}°`}
-        </div>
-      </Cell>
-      <Cell>
-        <div>
-          Weather Conditions
-        </div>
-        <div>
-          {weatherValue.get('weather') && weatherValue.get('weather').map((val) => val.get('description'))}
-        </div>
-      </Cell>
-    </Root>
+    <Table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Maximum Temperature</th>
+          <th>Minimum Temperature</th>
+          <th>Weather Conditions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {weatherRecords.get('daily').map((weatherValue, index) => (
+          <tr key={weatherValue.get('dt')}>
+            <td>
+              {moment().add(index, 'days').tz(weatherRecords.get('timezone')).format('dddd, Do MMM YYYY')}
+            </td>
+            <td>
+              {`${weatherValue.get('temp').get('max')}°`}
+            </td>
+            <td>
+              {`${weatherValue.get('temp').get('min')}°`}
+            </td>
+            <td>
+              {weatherValue.get('weather') && weatherValue.get('weather').map((val) => val.get('description'))}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
   );
 };
 
 WeatherWidget.propTypes = {
-  weatherRecords: ImmutablePropTypes.map.isRequired,
-  weatherValue: ImmutablePropTypes.map.isRequired,
-  index: PropTypes.number.isRequired,
+  weatherRecords: ImmutablePropTypes.map,
+};
+
+WeatherWidget.defaultProps = {
+  weatherRecords: Map(),
 };
 
 export default WeatherWidget;

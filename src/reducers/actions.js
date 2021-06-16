@@ -8,6 +8,8 @@ export const get_location_successed = createAction('GET_LOCATION_RESOLVED');
 
 export const get_weather_successed = createAction('GET_WEATHER_RESOLVED');
 
+export const clear_data = createAction('CLEAR_DATA');
+
 export const get_failed = createAction('GET_REJECTED');
 
 export const getLocationAction = (location, params) => (dispatch) => axios.get(`${settings.LOCATIONIQ_BASE_API_DOMAIN}?${queryString.stringify(_.assign({ q: location, key: settings.LOCATIONIQ_KEY, format: 'json' }, params))}`)

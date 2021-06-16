@@ -6,13 +6,24 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 
 import Select from 'react-select';
-import { getLocationAction, getWeatherAction } from '../../reducers/actions';
+import { getLocationAction, getWeatherAction, clear_data } from '../../reducers/actions';
 import { makeLocationSelector, makeWeatherSelector } from '../../selectors/get';
 import WeatherWidget from '../WeatherWidget';
+import { Root, SubmitBtn, SelectContainer } from './style';
+
+function usePrevious(value) {
+  const ref = React.useRef();
+  React.useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
 const Content = (props) => {
-  const { getLocation, locationRecords, getWeatherReport, weatherRecords } = props;
+  const { getLocation, locationRecords, getWeatherReport, weatherRecords, ClearData } = props;
   const [inputValue, setInputValue] = React.useState();
+
+  const prevInputValue = usePrevious({ inputValue });
 
   const isActive = inputValue && inputValue.get('value').get('lat') && inputValue.get('value').get('lon');
   const latitude = inputValue && inputValue.get('value').get('lat');
@@ -36,37 +47,42 @@ const Content = (props) => {
     getWeatherReport(latitude, longitude);
   };
 
+  React.useEffect(() => {
+    if (prevInputValue && prevInputValue.inputValue && !inputValue) {
+      ClearData();
+    }
+  }, [inputValue]);
+
   return (
-    <div>
-      <Select
-        value={Map(inputValue).toJS()}
-        onInputChange={handleInputChange}
-        onChange={handleOnChange}
-        options={options}
-      />
-      <button
+    <Root>
+      <SelectContainer>
+        <Select
+          value={Map(inputValue).toJS()}
+          onInputChange={handleInputChange}
+          onChange={handleOnChange}
+          options={options}
+          isClearable
+        />
+      </SelectContainer>
+      <SubmitBtn
         type="button"
         disabled={!isActive}
         onClick={handleOnSubmit}
       >
         Submit
-      </button>
-      {weatherRecords && weatherRecords.get('daily').map((value, index) => (
-        <WeatherWidget
-          key={value.get('dt')}
-          weatherRecords={weatherRecords}
-          weatherValue={value}
-          index={index}
-        />
-      ))}
-    </div>
+      </SubmitBtn>
+      <WeatherWidget
+        weatherRecords={weatherRecords}
+      />
+    </Root>
   );
 };
 
 Content.propTypes = {
   getLocation: PropTypes.func.isRequired,
   getWeatherReport: PropTypes.func.isRequired,
-  locationRecords: ImmutablePropTypes.map,
+  ClearData: PropTypes.func.isRequired,
+  locationRecords: ImmutablePropTypes.list,
   weatherRecords: ImmutablePropTypes.map,
 };
 
@@ -89,6 +105,7 @@ const makeMapStateToProps = () => {
 const mapDispatchToProps = (dispatch) => ({
   getLocation: (location) => dispatch(getLocationAction(location)),
   getWeatherReport: (lat, lon) => dispatch(getWeatherAction(lat, lon)),
+  ClearData: () => dispatch(clear_data()),
 });
 
 export default connect(

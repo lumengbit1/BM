@@ -35,5 +35,5 @@ yarn test
 #### Create production build
 
 ```
-npm run build
+yarn run build
 ```
